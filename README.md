@@ -1,26 +1,32 @@
-# Invoice-genei
-Just use this and save your time 
 # Invoice Genie — AI Invoice Data Extractor
 
-Welcome to Invoice Genie!  
-This project lets users upload invoice images, extract structured data using AI, and save/export results.
-
-## 🚀 Launch Steps
-
-1. **Initialize your repo**  
-   Commit this README.md to your main branch to get started.
-
-2. **Next steps (after initialization):**  
-   - I will create a new branch with all launch files (client, proxy, instructions).
-   - You will be able to review and merge the Pull Request to launch your site.
+This repository contains a client UI (Invoice Genie) that allows users to upload invoice images, request an extraction prompt, and receive structured data. The client saves extracted results to Firestore.
 
 ---
 
-## Security and Setup
+## 🚀 Launch Steps
 
-- **Never put sensitive API keys in the client code.**
-- Use a serverless proxy for Gemini API calls.
-- See the full launch guide in the next commit!
+1. **Configure Firestore and Firebase Authentication**
+   - Provide a Firebase config object to the client environment (see `index.html` placeholders).
+   - Ensure Firestore Security Rules are set to only allow expected reads/writes.
+   - Prefer using custom tokens for authenticated access where required.
+
+2. **Deploy or run a serverless proxy for Gemini**
+   - Create a serverless function (see `functions/gemini-proxy/`) and set the following environment variable:
+     - `GEMINI_API_KEY=your_real_gemini_api_key`
+   - Deploy to your provider (Google Cloud Functions, Cloud Run, Vercel, Netlify Functions, etc.)
+
+3. **Update client configuration**
+   - Remove hard-coded API keys from `index.html`.
+   - Point client calls to your serverless endpoint (e.g., `/api/extract`).
+
+---
+
+## Security checklist
+
+- Ensure firebase project uses secure Firestore rules (limit writes to authenticated users and require validation of data shape).
+- Keep `GEMINI_API_KEY` out of client bundles and source control; use environment variables in server deployments.
+- Monitor usage and set quotas or rate-limits on the proxy endpoint.
 
 ---
 
@@ -33,4 +39,19 @@ This project lets users upload invoice images, extract structured data using AI,
 
 ---
 
-**When ready, reply here and I’ll push the complete launch branch for you!**
+## Proxy server (functions/gemini-proxy/index.js)
+
+A serverless Express API that proxies requests to Gemini, keeping your API key safe.
+
+---
+
+## Suggested improvements
+
+- Harden JSON and CSV extraction logic (support nested objects/arrays)
+- Add automated tests for CSV and JSON conversion logic
+- Add accessibility improvements and keyboard support for the UI
+- Add CI and linting
+
+---
+
+**When ready, merge this branch and deploy your proxy for a secure launch!**
